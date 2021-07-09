@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using MyJetWallet.Sdk.Grpc;
-using Service.ExternalApi.Grpc;
 
 namespace Service.ExternalApi.Client
 {
@@ -10,7 +9,5 @@ namespace Service.ExternalApi.Client
         public ExternalApiClientFactory(string grpcServiceUrl) : base(grpcServiceUrl)
         {
         }
-
-        public IHelloService GetHelloService() => CreateGrpcService<IHelloService>();
     }
 }
