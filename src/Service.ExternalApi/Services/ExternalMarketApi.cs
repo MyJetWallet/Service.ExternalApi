@@ -26,31 +26,75 @@ namespace Service.ExternalApi.Services
             
             ValidateExchangeName(request.ExchangeName);
 
-            var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+            try
+            {
+                var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
 
-            return await exchange.GetNameAsync(request);
+                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
+
+                var exchangeResponse = await exchange.GetNameAsync(request);
+
+                _logger.LogInformation("Exchange Response: {exchangeResponseJson}",
+                    JsonConvert.SerializeObject(exchangeResponse));
+
+                return exchangeResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("GetNameAsync receive exception: {exJson}",
+                    JsonConvert.SerializeObject(ex));
+                return null;
+            }
         }
         
         public async Task<GetBalancesResponse> GetBalancesAsync(GetBalancesRequest request)
         {
             _logger.LogInformation("GetBalancesAsync receive request {requestJson}", JsonConvert.SerializeObject(request));
             
-            ValidateExchangeName(request.ExchangeName);
+            try
+            {
+                var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
 
-            var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
 
-            return await exchange.GetBalancesAsync(request);
+                var exchangeResponse = await exchange.GetBalancesAsync(request);
+
+                _logger.LogInformation("Exchange Response: {exchangeResponseJson}",
+                    JsonConvert.SerializeObject(exchangeResponse));
+
+                return exchangeResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("GetBalancesAsync receive exception: {exJson}",
+                    JsonConvert.SerializeObject(ex));
+                return null;
+            }
         }
 
         public async Task<GetMarketInfoResponse> GetMarketInfoAsync(MarketRequest request)
         {
             _logger.LogInformation("GetMarketInfoAsync receive request {requestJson}", JsonConvert.SerializeObject(request));
             
-            ValidateExchangeName(request.ExchangeName);
+            try
+            {
+                var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
 
-            var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
 
-            return await exchange.GetMarketInfoAsync(request);
+                var exchangeResponse = await exchange.GetMarketInfoAsync(request);
+
+                _logger.LogInformation("Exchange Response: {exchangeResponseJson}",
+                    JsonConvert.SerializeObject(exchangeResponse));
+
+                return exchangeResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("GetMarketInfoAsync receive exception: {exJson}",
+                    JsonConvert.SerializeObject(ex));
+                return null;
+            }
         }
 
         public async Task<GetMarketInfoListResponse> GetMarketInfoListAsync(GetMarketInfoListRequest request)
@@ -59,9 +103,25 @@ namespace Service.ExternalApi.Services
             
             ValidateExchangeName(request.ExchangeName);
 
-            var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+            try
+            {
+                var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
 
-            return await exchange.GetMarketInfoListAsync(request);
+                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
+
+                var exchangeResponse = await exchange.GetMarketInfoListAsync(request);
+
+                _logger.LogInformation("Exchange Response: {exchangeResponseJson}",
+                    JsonConvert.SerializeObject(exchangeResponse));
+
+                return exchangeResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("GetMarketInfoListAsync receive exception: {exJson}",
+                    JsonConvert.SerializeObject(ex));
+                return null;
+            }
         }
 
         public async Task<ExchangeTrade> MarketTrade(MarketTradeRequest request)
@@ -70,9 +130,25 @@ namespace Service.ExternalApi.Services
             
             ValidateExchangeName(request.ExchangeName);
 
-            var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+            try
+            {
+                var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
 
-            return await exchange.MarketTrade(request);
+                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
+
+                var exchangeResponse = await exchange.MarketTrade(request);
+
+                _logger.LogInformation("Exchange Response: {exchangeResponseJson}",
+                    JsonConvert.SerializeObject(exchangeResponse));
+
+                return exchangeResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("MarketTrade receive exception: {exJson}",
+                    JsonConvert.SerializeObject(ex));
+                return null;
+            }
         }
         
         private void ValidateExchangeName(string requestExchangeName)
