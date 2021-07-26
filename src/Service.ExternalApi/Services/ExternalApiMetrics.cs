@@ -5,7 +5,7 @@ using Prometheus;
 
 namespace Service.ExternalApi.Services
 {
-    public class ExternalApiMetricsInterceptor : Interceptor
+    public class ExternalApiMetrics
     {
         private static readonly Gauge TradeVolume = Metrics
             .CreateGauge("jet_external_api_trade_volume",
@@ -18,21 +18,15 @@ namespace Service.ExternalApi.Services
                 "Total trade count.",
                 new CounterConfiguration{ LabelNames = new []{ "market", "exchange"}});
 
-
-
         public void SetMetrics(MarketTradeRequest marketTrade)
         {
             TradeCounter
                 .WithLabels(marketTrade.Market, marketTrade.ExchangeName)
                 .Inc();
 
-            var lastVolume = TradeVolume
-                .WithLabels(marketTrade.Market, marketTrade.ExchangeName)
-                .Value;
-            
             TradeVolume
                 .WithLabels(marketTrade.Market, marketTrade.ExchangeName)
-                .Set(lastVolume + Math.Abs(marketTrade.Volume));
+                .Inc(Math.Abs(marketTrade.Volume));
         }
     }
 }

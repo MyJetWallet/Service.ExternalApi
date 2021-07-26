@@ -10,7 +10,7 @@ namespace Service.ExternalApi.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<ExternalApiMetricsInterceptor>()
+                .RegisterType<ExternalApiMetrics>()
                 .AsSelf()
                 .SingleInstance();
         }
