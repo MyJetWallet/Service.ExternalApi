@@ -13,11 +13,15 @@ namespace Service.ExternalApi.Services
     {
         private readonly ILogger<ExternalMarketApi> _logger;
         private readonly IExternalMarketManager _externalMarketManager;
+        private readonly ExternalApiMetricsInterceptor _externalApiMetricsInterceptor;
         
-        public ExternalMarketApi(IExternalMarketManager externalMarketManager, ILogger<ExternalMarketApi> logger)
+        public ExternalMarketApi(IExternalMarketManager externalMarketManager,
+            ILogger<ExternalMarketApi> logger,
+            ExternalApiMetricsInterceptor externalApiMetricsInterceptor)
         {
             _externalMarketManager = externalMarketManager;
             _logger = logger;
+            _externalApiMetricsInterceptor = externalApiMetricsInterceptor;
         }
 
         public async Task<GetNameResult> GetNameAsync(GetNameRequest request)
@@ -135,7 +139,9 @@ namespace Service.ExternalApi.Services
                 var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
 
                 _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
-
+                
+                _externalApiMetricsInterceptor.SetMetrics(request);
+                
                 var exchangeResponse = await exchange.MarketTrade(request);
 
                 _logger.LogInformation("Exchange Response: {exchangeResponseJson}",
