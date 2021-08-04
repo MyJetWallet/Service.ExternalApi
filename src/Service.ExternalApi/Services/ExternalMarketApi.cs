@@ -28,7 +28,7 @@ namespace Service.ExternalApi.Services
         {
             _logger.LogInformation("GetNameAsync receive request {requestJson}", JsonConvert.SerializeObject(request));
             
-            ValidateExchangeName(request.ExchangeName);
+            ProxyHelper.ValidateExchangeName(_logger, request.ExchangeName);
 
             try
             {
@@ -105,7 +105,7 @@ namespace Service.ExternalApi.Services
         {
             _logger.LogInformation("GetMarketInfoListAsync receive request {requestJson}", JsonConvert.SerializeObject(request));
             
-            ValidateExchangeName(request.ExchangeName);
+            ProxyHelper.ValidateExchangeName(_logger, request.ExchangeName);
 
             try
             {
@@ -132,7 +132,7 @@ namespace Service.ExternalApi.Services
         {
             _logger.LogInformation("MarketTrade receive request {requestJson}", JsonConvert.SerializeObject(request));
             
-            ValidateExchangeName(request.ExchangeName);
+            ProxyHelper.ValidateExchangeName(_logger, request.ExchangeName);
 
             try
             {
@@ -155,16 +155,6 @@ namespace Service.ExternalApi.Services
                     JsonConvert.SerializeObject(ex));
                 return null;
             }
-        }
-        
-        private void ValidateExchangeName(string requestExchangeName)
-        {
-            if (!string.IsNullOrWhiteSpace(requestExchangeName)) 
-                return;
-            
-            const string message = "Request without ExchangeName - bad request!";
-            _logger.LogError(message);
-            throw new Exception(message);
         }
     }
 }

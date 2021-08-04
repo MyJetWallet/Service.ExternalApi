@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using MyJetWallet.Domain.ExternalMarketApi;
-using MyJetWallet.Domain.ExternalMarketApi.Models;
+using MyJetWallet.Domain.ExternalMarketApi.Dto;
 using Service.ExternalApi.Domain.Services;
 
 namespace Service.ExternalApi.Services

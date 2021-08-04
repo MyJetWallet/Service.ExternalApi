@@ -24,6 +24,13 @@ namespace Service.ExternalApi.Modules
                 .As<IStartable>()
                 .AutoActivate()
                 .SingleInstance();
+            
+            builder
+                .RegisterType<OrderBookSourceManager>()
+                .As<IOrderBookSourceManager>()
+                .As<IStartable>()
+                .AutoActivate()
+                .SingleInstance();
         }
     }
 }

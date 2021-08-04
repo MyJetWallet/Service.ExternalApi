@@ -4,7 +4,7 @@ using System.Linq;
 using Autofac;
 using Microsoft.Extensions.Logging;
 using MyJetWallet.Domain.ExternalMarketApi;
-using MyJetWallet.Domain.ExternalMarketApi.Models;
+using MyJetWallet.Domain.ExternalMarketApi.Dto;
 using Newtonsoft.Json;
 
 namespace Service.ExternalApi.Domain.Services
@@ -21,7 +21,6 @@ namespace Service.ExternalApi.Domain.Services
         {
             _sources = markets;
             _logger = logger;
-            //_markets = markets.ToDictionary(e => e.GetName());
         }
 
         public IExternalMarket GetExternalMarketByName(string name)

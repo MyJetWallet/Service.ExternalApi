@@ -50,6 +50,7 @@ namespace Service.ExternalApi
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcSchema<OrderBookSource, IOrderBookSource>();
                 endpoints.MapGrpcSchema<ExternalMarketApi, IExternalMarket>();
                 endpoints.MapGrpcSchema<ExternalExchangeManager, IExternalExchangeManager>();
 
