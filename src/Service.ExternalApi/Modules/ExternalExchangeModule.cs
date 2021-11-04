@@ -13,8 +13,12 @@ namespace Service.ExternalApi.Modules
             {
                 if (externalExchange.Value?.IsEnabled == true)
                 {
-                    Console.WriteLine($"External exchange: {externalExchange.Key}");
+                    Console.WriteLine($"ENABLED External exchange: {externalExchange.Key}");
                     builder.RegisterExternalMarketClient(externalExchange.Value.GrpcUrl);
+                }
+                else
+                {
+                    Console.WriteLine($"DISABLED External exchange: {externalExchange.Key}");
                 }
             }
             
