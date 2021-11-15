@@ -14,13 +14,13 @@ namespace Service.ExternalApi.Services
             _externalMarketManager = externalMarketManager;
         }
 
-        public async Task<GetExternalExchangeCollectionResponse> GetExternalExchangeCollectionAsync()
+        public Task<GetExternalExchangeCollectionResponse> GetExternalExchangeCollectionAsync()
         {
             var response = new GetExternalExchangeCollectionResponse()
             {
                 ExchangeNames = _externalMarketManager.GetMarketNames()
             };
-            return response;
+            return Task.FromResult(response);
         }
     }
 }
