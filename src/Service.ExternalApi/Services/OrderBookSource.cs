@@ -111,18 +111,16 @@ namespace Service.ExternalApi.Services
             {
                 var exchange = _orderBookSourceManager.GetOrderBookSourceByName(request.ExchangeName);
 
-                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
-
                 var exchangeResponse = await exchange.GetOrderBookAsync(request);
 
-                _logger.LogInformation("Exchange Response: {exchangeResponseJson}",
-                    JsonConvert.SerializeObject(exchangeResponse));
+                _logger.LogInformation("Exchange Response Asks: {count}, Bids: {count}",
+                    exchangeResponse.OrderBook?.Asks?.Count, exchangeResponse.OrderBook?.Bids?.Count);
 
                 return exchangeResponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError("GetOrderBookAsync receive exception: {exJson}",
+                _logger.LogError("GetOrderBookAsync receive exception: {JsonText}",
                     JsonConvert.SerializeObject(ex));
                 return null;
             }
