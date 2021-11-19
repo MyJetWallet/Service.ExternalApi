@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using Microsoft.Extensions.Logging;
 using MyJetWallet.Domain.ExternalMarketApi;
@@ -30,7 +31,7 @@ namespace Service.ExternalApi.Domain.Services
 
             if (!_isAllSourcesLoaded)
             {
-                Start();
+                Reload(true);
                 if (_markets.TryGetValue(name, out market))
                     return market;
             }
@@ -45,8 +46,13 @@ namespace Service.ExternalApi.Domain.Services
 
         public void Start()
         {
+            Reload(false).GetAwaiter().GetResult();
+        }
+
+        private async Task Reload(bool reload)
+        {
+            _logger.LogInformation($"Start load markets [reload = {reload}] ...");
             _isAllSourcesLoaded = true;
-            _markets.Clear();
 
             var emptyRequest = new GetNameRequest();
             
@@ -54,9 +60,11 @@ namespace Service.ExternalApi.Domain.Services
             {
                 try
                 {
-                    var name = source.GetNameAsync(emptyRequest).GetAwaiter().GetResult();
+                    var name = await source.GetNameAsync(emptyRequest);
                     if (!string.IsNullOrEmpty(name?.Name))
                         _markets[name.Name] = source;
+                    else
+                        _isAllSourcesLoaded = false;
                 }
                 catch(Exception ex)
                 {
