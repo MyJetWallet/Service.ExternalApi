@@ -31,7 +31,7 @@ namespace Service.ExternalApi.Domain.Services
 
             if (!_isAllSourcesLoaded)
             {
-                Reload(true);
+                Reload(true).GetAwaiter().GetResult();
                 if (_markets.TryGetValue(name, out market))
                     return market;
             }
