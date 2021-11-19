@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MyJetWallet.Domain.ExternalMarketApi;
@@ -62,9 +63,10 @@ namespace Service.ExternalApi.Services
                 _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
 
                 var exchangeResponse = await exchange.GetBalancesAsync(request);
+                exchangeResponse.Balances ??= new List<ExchangeBalance>();
 
-                _logger.LogInformation("Exchange Response: {exchangeResponseJson}",
-                    JsonConvert.SerializeObject(exchangeResponse));
+                _logger.LogInformation("Exchange Response Balances count: {count}",
+                    exchangeResponse.Balances?.Count);
 
                 return exchangeResponse;
             }

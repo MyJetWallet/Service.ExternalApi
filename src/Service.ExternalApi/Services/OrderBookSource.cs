@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MyJetWallet.Domain.ExternalMarketApi;
 using MyJetWallet.Domain.ExternalMarketApi.Dto;
+using MyJetWallet.Domain.ExternalMarketApi.Models;
 using Newtonsoft.Json;
 using Service.ExternalApi.Domain.Services;
 
@@ -112,8 +114,10 @@ namespace Service.ExternalApi.Services
                 var exchange = _orderBookSourceManager.GetOrderBookSourceByName(request.ExchangeName);
 
                 var exchangeResponse = await exchange.GetOrderBookAsync(request);
+                exchangeResponse.OrderBook.Asks ??= new List<LeOrderBookLevel>();
+                exchangeResponse.OrderBook.Bids ??= new List<LeOrderBookLevel>();
 
-                _logger.LogInformation("Exchange Response Asks: {count}, Bids: {count}",
+                _logger.LogInformation("Exchange Response Asks: {count}, Bids: {count2}",
                     exchangeResponse.OrderBook?.Asks?.Count, exchangeResponse.OrderBook?.Bids?.Count);
 
                 return exchangeResponse;
