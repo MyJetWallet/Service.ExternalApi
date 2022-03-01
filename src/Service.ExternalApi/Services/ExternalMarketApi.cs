@@ -34,8 +34,14 @@ namespace Service.ExternalApi.Services
             try
             {
                 var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+                
+                if (exchange == null)
+                {
+                    _logger.LogError($"Cannot find exchange: {request.ExchangeName}");
+                    throw new Exception($"Cannot find exchange: {request.ExchangeName}");
+                }
 
-                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
+                _logger.LogInformation($"Exchange: {request.ExchangeName}");
 
                 var exchangeResponse = await exchange.GetNameAsync(request);
 
@@ -60,21 +66,32 @@ namespace Service.ExternalApi.Services
             {
                 var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
 
-                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
+                if (exchange == null)
+                {
+                    _logger.LogError($"Cannot find exchange: {request.ExchangeName}");
+                    return new GetBalancesResponse()
+                    {
+                        Balances = new List<ExchangeBalance>()
+                    };
+                }
+
+                _logger.LogInformation($"Exchange:{request.ExchangeName}");
 
                 var exchangeResponse = await exchange.GetBalancesAsync(request);
                 exchangeResponse.Balances ??= new List<ExchangeBalance>();
 
-                _logger.LogInformation("Exchange Response Balances count: {count}",
-                    exchangeResponse.Balances?.Count);
+                _logger.LogInformation("Exchange Response Balances count: {count}", exchangeResponse.Balances?.Count);
 
                 return exchangeResponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError("GetBalancesAsync receive exception: {exJson}",
-                    JsonConvert.SerializeObject(ex));
-                return null;
+                _logger.LogError("GetBalancesAsync receive exception: {exJson}", JsonConvert.SerializeObject(ex));
+                
+                return new GetBalancesResponse()
+                {
+                    Balances = new List<ExchangeBalance>()
+                };
             }
         }
 
@@ -85,13 +102,18 @@ namespace Service.ExternalApi.Services
             try
             {
                 var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+                
+                if (exchange == null)
+                {
+                    _logger.LogError($"Cannot find exchange: {request.ExchangeName}");
+                    throw new Exception($"Cannot find exchange: {request.ExchangeName}");
+                }
 
-                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
+                _logger.LogInformation($"Exchange: {request.ExchangeName}");
 
                 var exchangeResponse = await exchange.GetMarketInfoAsync(request);
 
-                _logger.LogInformation("Exchange Response: {exchangeResponseJson}",
-                    JsonConvert.SerializeObject(exchangeResponse));
+                _logger.LogInformation("Exchange Response: {exchangeResponseJson}", JsonConvert.SerializeObject(exchangeResponse));
 
                 return exchangeResponse;
             }
@@ -112,8 +134,14 @@ namespace Service.ExternalApi.Services
             try
             {
                 var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+                
+                if (exchange == null)
+                {
+                    _logger.LogError($"Cannot find exchange: {request.ExchangeName}");
+                    throw new Exception($"Cannot find exchange: {request.ExchangeName}");
+                }
 
-                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
+                _logger.LogInformation($"Exchange: {request.ExchangeName}");
 
                 var exchangeResponse = await exchange.GetMarketInfoListAsync(request);
 
@@ -139,8 +167,14 @@ namespace Service.ExternalApi.Services
             try
             {
                 var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+                
+                if (exchange == null)
+                {
+                    _logger.LogError($"Cannot find exchange: {request.ExchangeName}");
+                    throw new Exception($"Cannot find exchange: {request.ExchangeName}");
+                }
 
-                _logger.LogInformation("Exchange: {exchangeJson}", JsonConvert.SerializeObject(exchange));
+                _logger.LogInformation($"Exchange: {request.ExchangeName}");
                 
                 _externalApiMetrics.SetMetrics(request);
                 
