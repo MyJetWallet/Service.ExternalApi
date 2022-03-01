@@ -14,7 +14,21 @@ namespace Service.ExternalApi.Modules
                 if (externalExchange.Value?.IsEnabled == true)
                 {
                     Console.WriteLine($"ENABLED External exchange: {externalExchange.Key}");
-                    builder.RegisterExternalMarketClient(externalExchange.Value.GrpcUrl);
+                    
+                    var orderBookClientFactory = new ExternalMarketClientFactory(externalExchange.Value.OrderBookGrpcUrl);
+                    var apiClientFactory = new ExternalMarketClientFactory(externalExchange.Value.ApiGrpcUrl);
+                    
+                    builder.RegisterInstance(orderBookClientFactory.GetIExternalExchangeManagerGrpc())
+                        .As<IExternalExchangeManager>()
+                        .SingleInstance();
+                    
+                    builder.RegisterInstance(apiClientFactory.GetExternalMarketGrpc())
+                        .As<IExternalMarket>()
+                        .SingleInstance();
+                    
+                    builder.RegisterInstance(orderBookClientFactory.GetOrderBookSourceGrpc())
+                        .As<IOrderBookSource>()
+                        .SingleInstance();
                 }
                 else
                 {

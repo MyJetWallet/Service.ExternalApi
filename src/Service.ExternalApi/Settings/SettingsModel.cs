@@ -24,7 +24,10 @@ namespace Service.ExternalApi.Settings
         [YamlProperty("IsEnabled")]
         public bool IsEnabled { get; set; }
 
-        [YamlProperty("GrpcUrl")]
-        public string GrpcUrl { get; set; }
+        [YamlProperty("ApiGrpcUrl")]
+        public string ApiGrpcUrl { get; set; }
+        
+        [YamlProperty("OrderBookGrpcUrl")]
+        public string OrderBookGrpcUrl { get; set; }
     }
 }
