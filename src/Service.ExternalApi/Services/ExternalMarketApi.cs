@@ -177,5 +177,39 @@ namespace Service.ExternalApi.Services
                 return null;
             }
         }
+
+        public async Task<GetTradesResponse> GetTradesAsync(GetTradesRequest request)
+        {
+            _logger.LogInformation("GetTrades receive request {@request}", request);
+            
+            ProxyHelper.ValidateExchangeName(_logger, request.ExchangeName);
+
+            try
+            {
+                var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+                
+                if (exchange == null)
+                {
+                    _logger.LogWarning("Cannot GetTrades. No exchange with name: {exchangeName}", request.ExchangeName);
+
+                    return new GetTradesResponse
+                    {
+                        ErrorMessage = $"Cannot find exchange: {request.ExchangeName}",
+                        IsError = true
+                    };
+                }
+
+                var exchangeResponse = await exchange.GetTradesAsync(request);
+
+                _logger.LogInformation("GetTrades Exchange Response: {@exchangeResponse}", exchangeResponse);
+
+                return exchangeResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed MarketTrade {@request}", request);
+                return null;
+            }
+        }
     }
 }
