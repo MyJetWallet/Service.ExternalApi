@@ -211,5 +211,33 @@ namespace Service.ExternalApi.Services
                 return null;
             }
         }
+
+        public async Task<ExchangeTrade> MakeLimitTradeAsync(MakeLimitTradeRequest request)
+        {
+            _logger.LogInformation("MakeLimitTrade receive request {@request}", request);
+            
+            ProxyHelper.ValidateExchangeName(_logger, request.ExchangeName);
+            
+            try
+            {
+                var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+                
+                if (exchange == null)
+                {
+                    throw new Exception($"Cannot MakeLimitTrade. No exchange with name: {request.ExchangeName}");
+                }
+
+                var exchangeResponse = await exchange.MakeLimitTradeAsync(request);
+
+                _logger.LogInformation("MakeLimitTrade Exchange Response: {@exchangeResponse}", exchangeResponse);
+
+                return exchangeResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed MakeLimitTrade {@request}", request);
+                throw;
+            }
+        }
     }
 }
