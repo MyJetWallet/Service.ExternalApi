@@ -239,5 +239,61 @@ namespace Service.ExternalApi.Services
                 throw;
             }
         }
+
+        public async Task<GetWithdrawalsHistoryResponse> GetWithdrawalsHistoryAsync(GetWithdrawalsHistoryRequest request)
+        {
+            _logger.LogInformation("GetWithdrawalsHistoryAsync receive request {@request}", request);
+            
+            ProxyHelper.ValidateExchangeName(_logger, request.ExchangeName);
+            
+            try
+            {
+                var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+                
+                if (exchange == null)
+                {
+                    throw new Exception($"Cannot GetWithdrawalsHistoryAsync. No exchange with name: {request.ExchangeName}");
+                }
+
+                var exchangeResponse = await exchange.GetWithdrawalsHistoryAsync(request);
+
+                _logger.LogInformation("GetWithdrawalsHistoryAsync Exchange Response: {@exchangeResponse}", exchangeResponse);
+
+                return exchangeResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed GetWithdrawalsHistoryAsync {@request}", request);
+                throw;
+            }
+        }
+
+        public async Task<GetDepositsHistoryResponse> GetDepositsHistoryAsync(GetDepositsHistoryRequest request)
+        {
+            _logger.LogInformation("GetDepositsHistoryAsync receive request {@request}", request);
+            
+            ProxyHelper.ValidateExchangeName(_logger, request.ExchangeName);
+            
+            try
+            {
+                var exchange = _externalMarketManager.GetExternalMarketByName(request.ExchangeName);
+                
+                if (exchange == null)
+                {
+                    throw new Exception($"Cannot GetDepositsHistoryAsync. No exchange with name: {request.ExchangeName}");
+                }
+
+                var exchangeResponse = await exchange.GetDepositsHistoryAsync(request);
+
+                _logger.LogInformation("GetDepositsHistoryAsync Exchange Response: {@exchangeResponse}", exchangeResponse);
+
+                return exchangeResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed GetDepositsHistoryAsync {@request}", request);
+                throw;
+            }
+        }
     }
 }
