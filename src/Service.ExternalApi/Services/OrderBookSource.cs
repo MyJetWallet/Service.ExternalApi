@@ -105,7 +105,8 @@ namespace Service.ExternalApi.Services
 
         public async Task<GetOrderBookResponse> GetOrderBookAsync(MarketRequest request)
         {
-            _logger.LogInformation("GetOrderBookAsync receive request {requestJson}", JsonConvert.SerializeObject(request));
+            var requestJson = JsonConvert.SerializeObject(request);
+            _logger.LogInformation("GetOrderBookAsync receive request {requestJson}", requestJson);
             
             ProxyHelper.ValidateExchangeName(_logger, request.ExchangeName);
 
@@ -117,15 +118,15 @@ namespace Service.ExternalApi.Services
                 exchangeResponse.OrderBook.Asks ??= new List<LeOrderBookLevel>();
                 exchangeResponse.OrderBook.Bids ??= new List<LeOrderBookLevel>();
 
-                _logger.LogInformation("Exchange Response Asks: {count}, Bids: {count2}",
-                    exchangeResponse.OrderBook?.Asks?.Count, exchangeResponse.OrderBook?.Bids?.Count);
+                _logger.LogInformation("GetOrderBookAsync exchange {requestJson} response Asks: {count}, Bids: {count2}",
+                    requestJson, exchangeResponse.OrderBook?.Asks?.Count, exchangeResponse.OrderBook?.Bids?.Count);
 
                 return exchangeResponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError("GetOrderBookAsync receive exception: {JsonText}",
-                    JsonConvert.SerializeObject(ex));
+                _logger.LogError("GetOrderBookAsync {requestJson} receive exception: {JsonText}",
+                    requestJson, JsonConvert.SerializeObject(ex));
                 return null;
             }
         }
